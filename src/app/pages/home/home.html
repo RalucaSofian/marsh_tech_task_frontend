@@ -1,0 +1,50 @@
+<div class="min-h-screen bg-background flex flex-col">
+    <header class="border-b border-border bg-card px-6 py-4">
+        <div class="flex items-center justify-between max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <div class="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
+                    <lucide-angular class="h-5 w-5 text-primary-foreground" [img]="Monitor"></lucide-angular>
+                </div>
+                <div>
+                    <h1 class="text-lg font-semibold text-foreground">Device Manager</h1>
+                    <p class="text-xs text-muted-foreground">{{devices().length}} devices</p>
+                </div>
+            </div>
+            <app-button [buttonVariant]="ButtonVariant.DEFAULT" [buttonSize]="ButtonSize.DEFAULT">
+                <lucide-angular class="h-4 w-4" [img]="Plus"></lucide-angular>
+                Add Device
+            </app-button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 max-w-7xl mx-auto w-full">
+        <div class='flex-1 flex flex-col border-r border-border'>
+            <div class="p-4 border-b border-border">
+                <div class="relative">
+                    <lucide-angular class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" [img]="Search"></lucide-angular>
+                    <app-input appInputClass="pl-12" appInputPlaceholder="Search devices..." appInputType="text"></app-input>
+                </div>
+            </div>
+            <div class="flex-1 overflow-y-auto">
+                @for (dev of devices(); track $index) {
+                    <app-device-card [deviceInfo]="dev" [selected]="dev.id === selectedDeviceId()"
+                        (deviceSelected)="deviceSelectedHandler($event)"
+                        (deviceDeleted)="deviceDeletedHandler($event)">
+                    </app-device-card>
+                }
+            </div>
+        </div>
+
+
+        @if (selectedDeviceId() !== -1) {
+            <div class="w-full md:w-100 shrink-0">
+                @for (dev of devices(); track $index) {
+                    @if (dev.id === selectedDeviceId()) {
+                        <app-device-details [deviceInfo]="dev" (detailsClosed)="deviceSelectedHandler(-1)"></app-device-details>
+                    }
+                }
+            </div>
+        }
+    </div>
+
+</div>
