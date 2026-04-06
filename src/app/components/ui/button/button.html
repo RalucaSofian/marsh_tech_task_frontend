@@ -1,5 +1,9 @@
-<button type="button"
+<button
+    type="button"
     [routerLink]="routerLinkValue()"
-    [class]="`${buttonDefaultClasses} ${btnVariantClasses()} ${btnSizeClasses()} ${btnClass()}`">
+    [disabled]="btnDisabled()"
+    (click)="btnClick.emit()"
+    [class]="`${buttonDefaultClasses} ${btnVariantClasses()} ${btnSizeClasses()} ${btnClass()}`"
+>
     <ng-content></ng-content>
 </button>

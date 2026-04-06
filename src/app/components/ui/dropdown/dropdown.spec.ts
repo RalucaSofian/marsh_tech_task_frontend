@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DetailRow } from './detail-row';
+import { Dropdown } from './dropdown';
 
-describe('DetailRow', () => {
-    let component: DetailRow;
-    let fixture: ComponentFixture<DetailRow>;
+describe('Dropdown', () => {
+    let component: Dropdown;
+    let fixture: ComponentFixture<Dropdown>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [DetailRow],
+            imports: [Dropdown],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(DetailRow);
+        fixture = TestBed.createComponent(Dropdown);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

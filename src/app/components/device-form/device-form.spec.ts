@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DetailRow } from './detail-row';
+import { DeviceForm } from './device-form';
 
-describe('DetailRow', () => {
-    let component: DetailRow;
-    let fixture: ComponentFixture<DetailRow>;
+describe('DeviceForm', () => {
+    let component: DeviceForm;
+    let fixture: ComponentFixture<DeviceForm>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [DetailRow],
+            imports: [DeviceForm],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(DetailRow);
+        fixture = TestBed.createComponent(DeviceForm);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

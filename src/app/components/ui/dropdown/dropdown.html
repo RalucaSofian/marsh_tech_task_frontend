@@ -1,0 +1,15 @@
+<div
+    class="flex flex-col relative w-full rounded-md border border-input bg-background text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+>
+    <select
+        [ngModel]="currentValue()"
+        (ngModelChange)="handleOptionSelect($event)"
+        class="h-12 px-4 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+    >
+        @for (option of options(); track $index) {
+            <option [ngValue]="option.value" [selected]="currentValue() === option.value">
+                {{ option.display }}
+            </option>
+        }
+    </select>
+</div>

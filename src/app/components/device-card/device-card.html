@@ -1,12 +1,19 @@
-<div [class]="`group flex items-center gap-4 px-4 py-3 cursor-pointer transition-all hover:bg-accent/90 hover:shadow-sm hover:pl-5 ${selected() ? 'bg-accent pl-5' : ''}`"
-    (click)="deviceSelected.emit(deviceInfo().id!)">
-    <div [class]="`h-10 w-10 rounded-lg flex items-center justify-center shrink-0 transition-colors ${selected() ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground group-hover:bg-primary/20 group-hover:text-primary'}`">
+<div
+    [class]="`group flex items-center gap-4 px-4 py-3 cursor-pointer transition-all hover:bg-accent/90 hover:shadow-sm hover:pl-5 ${selected() ? 'bg-accent pl-5' : ''}`"
+    (click)="deviceSelected.emit(deviceInfo().id!)"
+>
+    <div
+        [class]="`h-10 w-10 rounded-lg flex items-center justify-center shrink-0 transition-colors ${selected() ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground group-hover:bg-primary/20 group-hover:text-primary'}`"
+    >
         <lucide-angular class="h-5 w-5" [img]="getDeviceIcon(deviceInfo().type!)"></lucide-angular>
     </div>
     <div class="flex-1 min-w-0">
         <div class="flex items-center gap-2">
             <p class="text-sm font-medium text-foreground truncate">{{ deviceInfo().name }}</p>
-            <span class="flex items-center border border-primary rounded-xl py-0 px-2 text-xs shrink-0">{{ deviceInfo().type }}</span>
+            <span
+                class="flex items-center border border-primary rounded-xl py-0 px-2 text-xs shrink-0"
+                >{{ deviceInfo().type }}</span
+            >
         </div>
         <div class="flex items-center gap-3 mt-0.5">
             <span class="text-xs text-muted-foreground">{{ deviceInfo().manufacturer }}</span>
@@ -21,24 +28,12 @@
             }
         </div>
     </div>
-    <app-button [buttonVariant]="ButtonVariant.GHOST" [buttonSize]="ButtonSize.ICON"
+    <app-button
+        [buttonVariant]="ButtonVariant.GHOST"
+        [buttonSize]="ButtonSize.ICON"
         btnClass="shrink-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200"
-        (click)="$event.stopPropagation(); deviceDeleted.emit(deviceInfo().id!); deleteDeviceModalOpened.set(true)">
+        (click)="$event.stopPropagation(); deviceDeleteClicked.emit(deviceInfo().id!)"
+    >
         <lucide-angular class="h-4 w-4 cursor-pointer" [img]="Trash2"></lucide-angular>
     </app-button>
 </div>
-
-<app-modal [isOpen]="deleteDeviceModalOpened()" (onClose)="deleteDeviceModalOpened.set(false)">
-    <div class="flex flex-col text-center sm:text-left">
-        <div class="mb-2 text-lg font-semibold">
-            Delete device
-        </div>
-        <div class="mb-4 text-sm text-muted-foreground">
-            Are you sure you want to delete <span class="font-semibold">{{ deviceInfo().name }}</span>? This action cannot be undone.
-        </div>
-    </div>
-    <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:space-x-2">
-        <app-button btnClass="sm:mt-0" [buttonVariant]="ButtonVariant.OUTLINE" [buttonSize]="ButtonSize.DEFAULT" >Cancel</app-button>
-        <app-button btnClass="bg-destructive text-destructive-foreground hover:bg-destructive/90" [buttonVariant]="ButtonVariant.DESTRUCTIVE" [buttonSize]="ButtonSize.DEFAULT">Delete</app-button>
-    </div>
-</app-modal>
