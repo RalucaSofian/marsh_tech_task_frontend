@@ -1,0 +1,59 @@
+<div class="min-h-screen flex items-center justify-center bg-background px-4">
+    <div
+        class="rounded-lg border border-card bg-card text-card-foreground shadow-sm w-full max-w-md shadow-lg"
+    >
+        <div class="flex flex-col gap-2 p-6 text-center">
+            <div
+                class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-md"
+            >
+                <lucide-angular class="h-7 w-7" [img]="LogIn"></lucide-angular>
+            </div>
+            <div class="text-2xl font-semibold leading-none tracking-tight">Welcome back</div>
+            <div class="text-sm text-muted-foreground">Sign in to manage your devices</div>
+        </div>
+        <form action="#" method="post" [formGroup]="signInForm" (ngSubmit)="onSignInSubmit()">
+            <div class="p-6 pt-0 gap-4">
+                <div class="flex flex-col gap-3 mb-3">
+                    <label for="email" class="text-sm font-medium leading-none">Email</label>
+                    <app-input
+                        id="email"
+                        appInputType="email"
+                        name="email"
+                        formControlName="email"
+                    ></app-input>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <label for="password" class="text-sm font-medium leading-none">Password</label>
+                    <app-input
+                        id="password"
+                        appInputType="password"
+                        name="password"
+                        formControlName="password"
+                        required
+                        autocomplete="current-password"
+                    ></app-input>
+                </div>
+            </div>
+            <div class="flex flex-col items-center gap-3 p-6 pt-0">
+                <app-button
+                    btnClass="w-100"
+                    [buttonVariant]="ButtonVariant.DEFAULT"
+                    [buttonSize]="ButtonSize.DEFAULT"
+                    (btnClick)="onSignInSubmit()"
+                    [btnDisabled]="!signInForm.valid"
+                >
+                    Sign in
+                </app-button>
+                @if (signInError()) {
+                    <div class="text-sm text-destructive">Invalid credentials</div>
+                }
+                <p class="text-sm text-muted-foreground">
+                    Don't have an account?
+                    <a routerLink="/register" class="text-primary hover:underline font-medium"
+                        >Sign up</a
+                    >
+                </p>
+            </div>
+        </form>
+    </div>
+</div>

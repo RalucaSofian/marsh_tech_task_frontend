@@ -2,13 +2,33 @@
     <div class="flex items-center justify-between p-4 border-b border-border">
         <h2 class="font-semibold text-foreground">Device Details</h2>
         <div class="flex gap-1">
-            <app-button
-                (click)="editDeviceModalOpened.set(true)"
-                [buttonVariant]="ButtonVariant.GHOST"
-                [buttonSize]="ButtonSize.ICON"
-            >
-                <lucide-angular class="h-4 w-4" [img]="Pencil"></lucide-angular>
-            </app-button>
+            @if (currentUser().role !== 'USER') {
+                <app-button
+                    (click)="editDeviceModalOpened.set(true)"
+                    [buttonVariant]="ButtonVariant.GHOST"
+                    [buttonSize]="ButtonSize.ICON"
+                >
+                    <lucide-angular class="h-4 w-4" [img]="Pencil"></lucide-angular>
+                </app-button>
+            }
+            @if (!deviceInfo().assignedUser) {
+                <app-button
+                    btnClass="text-xs rounded-md mx-2"
+                    [buttonVariant]="ButtonVariant.OUTLINE"
+                    [buttonSize]="ButtonSize.SMALL"
+                    (btnClick)="assignToMeHandler()"
+                    >Assign To Me</app-button
+                >
+            }
+            @if (deviceInfo().assignedUser?.id === currentUser().id) {
+                <app-button
+                    btnClass="text-xs rounded-md mx-2"
+                    [buttonVariant]="ButtonVariant.SECONDARY"
+                    [buttonSize]="ButtonSize.SMALL"
+                    (btnClick)="unassignFromMeHandler()"
+                    >Unassign From Me</app-button
+                >
+            }
             <app-button
                 [buttonVariant]="ButtonVariant.GHOST"
                 [buttonSize]="ButtonSize.ICON"
@@ -59,11 +79,9 @@
                     <div class="flex items-center gap-2">
                         <lucide-angular
                             class="h-4 w-4 text-muted-foreground"
-                            [img]="User"
+                            [img]="UserIcon"
                         ></lucide-angular>
-                        <span class="text-sm text-foreground">{{
-                            deviceInfo().assignedUser?.name
-                        }}</span>
+                        <span class="text-sm text-foreground">{{ assignedUserName }}</span>
                     </div>
                 } @else {
                     <div

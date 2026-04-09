@@ -9,6 +9,9 @@ import { DeviceDetails } from '../../components/device-details/device-details';
 import { Modal } from '../../components/ui/modal/modal';
 import { DeviceForm } from '../../components/device-form/device-form';
 import { CreateDeviceDTO, EditDeviceDTO } from '../../dtos/deviceDTOs';
+import { User } from '../../models/user';
+import { UsersService } from '../../services/users-service';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
     selector: 'app-home',
@@ -32,6 +35,11 @@ export class Home {
     addDeviceModalOpened = signal<boolean>(false);
 
     selectedDeviceId = signal<number>(-1);
+
+    usersService: UsersService = inject(UsersService);
+    currentUser: Signal<User> = this.usersService.currentUser;
+
+    authService: AuthService = inject(AuthService);
 
     ngOnInit(): void {
         this.devicesService.fetchDevices();
@@ -59,5 +67,27 @@ export class Home {
 
     deviceEditedHandler(deviceEdited: EditDeviceDTO) {
         this.devicesService.patchDevice(deviceEdited);
+    }
+
+    assignToMeHandler() {
+        const newDeviceInfo: EditDeviceDTO = {
+            id: this.selectedDeviceId(),
+            userId: this.currentUser().id,
+        };
+        this.devicesService.patchDevice(newDeviceInfo);
+        this.devicesService.fetchDevices();
+    }
+
+    unassignFromMeHandler() {
+        const newDeviceInfo: EditDeviceDTO = {
+            id: this.selectedDeviceId(),
+            userId: null,
+        };
+        this.devicesService.patchDevice(newDeviceInfo);
+        this.devicesService.fetchDevices();
+    }
+
+    logOutHandler() {
+        this.authService.logout();
     }
 }

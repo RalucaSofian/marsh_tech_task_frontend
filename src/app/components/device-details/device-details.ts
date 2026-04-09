@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, inject, input, output, Signal, signal } from '@angular/core';
 import { Device, DeviceType } from '../../models/device';
 import {
     LucideAngularModule,
@@ -15,6 +15,8 @@ import { DetailRow } from './detail-row/detail-row';
 import { Modal } from '../ui/modal/modal';
 import { DeviceForm } from '../device-form/device-form';
 import { EditDeviceDTO } from '../../dtos/deviceDTOs';
+import { UsersService } from '../../services/users-service';
+import { User as UserModel } from '../../models/user';
 
 @Component({
     selector: 'app-device-details',
@@ -27,14 +29,20 @@ export class DeviceDetails {
 
     readonly Pencil = Pencil;
     readonly X = X;
-    readonly User = User;
+    readonly UserIcon = User;
     readonly ButtonVariant = ButtonVariant;
     readonly ButtonSize = ButtonSize;
 
     editDeviceModalOpened = signal<boolean>(false);
 
+    usersService: UsersService = inject(UsersService);
+    currentUser: Signal<UserModel> = this.usersService.currentUser;
+
     detailsClosed = output<void>();
     detailsEdited = output<EditDeviceDTO>();
+
+    assignToMe = output<void>();
+    unassignFromMe = output<void>();
 
     getDeviceIcon(type: DeviceType): LucideIconData {
         switch (type) {
@@ -52,5 +60,21 @@ export class DeviceDetails {
     detailsEditedHandler(deviceInfo: EditDeviceDTO) {
         this.detailsEdited.emit(deviceInfo);
         this.editDeviceModalOpened.set(false);
+    }
+
+    assignToMeHandler() {
+        this.assignToMe.emit();
+    }
+
+    unassignFromMeHandler() {
+        this.unassignFromMe.emit();
+    }
+
+    get assignedUserName(): string | undefined {
+        if (this.deviceInfo().assignedUser?.name === this.currentUser().name) {
+            return 'Me';
+        } else {
+            return this.deviceInfo().assignedUser?.name;
+        }
     }
 }

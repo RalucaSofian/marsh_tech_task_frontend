@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, inject, input, output, Signal, signal } from '@angular/core';
 import { Device, DeviceType } from '../../models/device';
 import {
     LucideAngularModule,
@@ -11,6 +11,8 @@ import {
 } from 'lucide-angular';
 
 import { Button, ButtonSize, ButtonVariant } from '../ui/button/button';
+import { UsersService } from '../../services/users-service';
+import { User as UserModel } from '../../models/user';
 
 @Component({
     selector: 'app-device-card',
@@ -28,6 +30,9 @@ export class DeviceCard {
     deviceInfo = input.required<Device>();
     selected = input<boolean>(false);
 
+    usersService: UsersService = inject(UsersService);
+    currentUser: Signal<UserModel> = this.usersService.currentUser;
+
     deviceSelected = output<number>();
     deviceDeleteClicked = output<number>();
 
@@ -41,6 +46,14 @@ export class DeviceCard {
                 return Tablet;
             default:
                 return Laptop;
+        }
+    }
+
+    get assignedUserName(): string | undefined {
+        if (this.deviceInfo().assignedUser?.name === this.currentUser().name) {
+            return 'Me';
+        } else {
+            return this.deviceInfo().assignedUser?.name;
         }
     }
 }

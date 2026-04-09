@@ -1,0 +1,90 @@
+<div class="min-h-screen flex items-center justify-center bg-background px-4">
+    <div
+        class="rounded-lg border border-card bg-card text-card-foreground shadow-sm w-full max-w-md shadow-lg"
+    >
+        <div class="flex flex-col gap-2 p-6 text-center">
+            <div
+                class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-md"
+            >
+                <lucide-angular class="h-7 w-7" [img]="UserPlus"></lucide-angular>
+            </div>
+            <div class="text-2xl font-semibold leading-none tracking-tight">Create an account</div>
+            <div class="text-sm text-muted-foreground">Get started managing your devices</div>
+        </div>
+        <form action="#" method="post" [formGroup]="signUpForm" (ngSubmit)="onSignUpSubmit()">
+            <div class="p-6 pt-0 gap-4">
+                <div class="flex flex-col gap-3 mb-3">
+                    <label for="name" class="text-sm font-medium leading-none">Full name</label>
+                    <app-input
+                        id="name"
+                        appInputType="text"
+                        name="name"
+                        formControlName="name"
+                    ></app-input>
+                </div>
+                <div class="flex flex-col gap-3 mb-3">
+                    <label for="email" class="text-sm font-medium leading-none">Email</label>
+                    <app-input
+                        id="email"
+                        appInputType="text"
+                        name="email"
+                        formControlName="email"
+                    ></app-input>
+                </div>
+                <div class="flex flex-col gap-3 mb-3">
+                    <label for="password" class="text-sm font-medium leading-none">Password</label>
+                    <app-input
+                        id="password"
+                        appInputType="password"
+                        name="password"
+                        formControlName="password"
+                        required
+                        autocomplete="current-password"
+                    ></app-input>
+                </div>
+                <div class="flex flex-col gap-3 mb-3">
+                    <label for="confirmPassword" class="text-sm font-medium leading-none"
+                        >Confirm password</label
+                    >
+                    <app-input
+                        id="confirmPassword"
+                        appInputType="password"
+                        name="confirmPassword"
+                        formControlName="confirmPassword"
+                        required
+                        autocomplete="current-password"
+                    ></app-input>
+                </div>
+                <div class="flex flex-col gap-3 mb-3">
+                    <label for="location" class="text-sm font-medium leading-none">Location</label>
+                    <app-input
+                        id="location"
+                        appInputType="text"
+                        name="location"
+                        formControlName="location"
+                    ></app-input>
+                </div>
+            </div>
+            <div class="flex flex-col items-center p-6 pt-0 gap-3">
+                <app-button
+                    btnClass="w-100"
+                    [buttonVariant]="ButtonVariant.DEFAULT"
+                    [buttonSize]="ButtonSize.DEFAULT"
+                    (btnClick)="onSignUpSubmit()"
+                    [btnDisabled]="!signUpForm.valid"
+                >
+                    Create account
+                </app-button>
+                @if (signUpError()) {
+                    <div class="text-sm text-destructive">Something went wrong. Please retry</div>
+                }
+                <p class="text-sm text-muted-foreground">
+                    Already have an account?
+                    <a routerLink="/login" class="text-primary hover:underline font-medium">
+                        Sign in
+                    </a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>

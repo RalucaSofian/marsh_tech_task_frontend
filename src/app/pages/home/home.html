@@ -9,18 +9,41 @@
                     ></lucide-angular>
                 </div>
                 <div>
-                    <h1 class="text-lg font-semibold text-foreground">Device Manager</h1>
+                    @if (currentUser().role === 'ADMIN') {
+                        <h1 class="text-lg font-semibold text-foreground">
+                            Device Manager for Admins
+                        </h1>
+                        <h2 class="text-sm font-semibold text-muted-foreground">
+                            Administrator {{ currentUser().name }}
+                        </h2>
+                    } @else {
+                        <h1 class="text-lg font-semibold text-foreground">
+                            Device Manager for
+                            <span class="text-primary">{{ currentUser().name }}</span>
+                        </h1>
+                    }
+
                     <p class="text-xs text-muted-foreground">{{ devices().length }} devices</p>
                 </div>
             </div>
-            <app-button
-                [buttonVariant]="ButtonVariant.DEFAULT"
-                [buttonSize]="ButtonSize.DEFAULT"
-                (click)="addDeviceModalOpened.set(true)"
-            >
-                <lucide-angular class="h-4 w-4" [img]="Plus"></lucide-angular>
-                Add Device
-            </app-button>
+            <div class="flex flex-row gap-3">
+                @if (currentUser().role === 'ADMIN') {
+                    <app-button
+                        [buttonVariant]="ButtonVariant.DEFAULT"
+                        [buttonSize]="ButtonSize.DEFAULT"
+                        (click)="addDeviceModalOpened.set(true)"
+                    >
+                        <lucide-angular class="h-4 w-4" [img]="Plus"></lucide-angular>
+                        Add Device
+                    </app-button>
+                }
+                <app-button
+                    [buttonVariant]="ButtonVariant.DESTRUCTIVE"
+                    [buttonSize]="ButtonSize.DEFAULT"
+                    (click)="logOutHandler()"
+                    >Log out</app-button
+                >
+            </div>
         </div>
     </header>
     <div class="flex flex-1 max-w-7xl mx-auto w-full">
@@ -58,6 +81,8 @@
                             [deviceInfo]="dev"
                             (detailsEdited)="deviceEditedHandler($event)"
                             (detailsClosed)="deviceSelectedHandler(-1)"
+                            (assignToMe)="assignToMeHandler()"
+                            (unassignFromMe)="unassignFromMeHandler()"
                         ></app-device-details>
                     }
                 }
@@ -69,29 +94,47 @@
 <app-modal [isOpen]="deleteDeviceModalOpened()" (onClose)="deleteDeviceModalOpened.set(false)">
     <div class="flex flex-col text-center sm:text-left">
         <div class="mb-2 text-lg font-semibold">Delete device</div>
-        <div class="mb-4 text-sm text-muted-foreground">
-            Are you sure you want to delete
-            <span class="font-semibold">{{ deviceToBeDeleted().name }}</span
-            >? This action cannot be undone.
-        </div>
+        @if (currentUser().role === 'USER') {
+            <div class="mb-4 text-sm text-muted-foreground">
+                This action is only available for
+                <span class="font-semibold">Admins</span>
+            </div>
+        } @else {
+            <div class="mb-4 text-sm text-muted-foreground">
+                Are you sure you want to delete
+                <span class="font-semibold">{{ deviceToBeDeleted().name }}</span
+                >? This action cannot be undone.
+            </div>
+        }
     </div>
     <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:space-x-2">
-        <app-button
-            btnClass="sm:mt-0"
-            [buttonVariant]="ButtonVariant.OUTLINE"
-            [buttonSize]="ButtonSize.DEFAULT"
-            (click)="deleteDeviceModalOpened.set(false); deviceToBeDeleted.set({})"
-        >
-            Cancel
-        </app-button>
-        <app-button
-            btnClass="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            [buttonVariant]="ButtonVariant.DESTRUCTIVE"
-            [buttonSize]="ButtonSize.DEFAULT"
-            (click)="deviceDeletedHandler(deviceToBeDeleted().id!)"
-        >
-            Delete
-        </app-button>
+        @if (currentUser().role === 'USER') {
+            <app-button
+                btnClass="sm:mt-0"
+                [buttonVariant]="ButtonVariant.OUTLINE"
+                [buttonSize]="ButtonSize.DEFAULT"
+                (click)="deleteDeviceModalOpened.set(false); deviceToBeDeleted.set({})"
+            >
+                Close
+            </app-button>
+        } @else {
+            <app-button
+                btnClass="sm:mt-0"
+                [buttonVariant]="ButtonVariant.OUTLINE"
+                [buttonSize]="ButtonSize.DEFAULT"
+                (click)="deleteDeviceModalOpened.set(false); deviceToBeDeleted.set({})"
+            >
+                Cancel
+            </app-button>
+            <app-button
+                btnClass="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                [buttonVariant]="ButtonVariant.DESTRUCTIVE"
+                [buttonSize]="ButtonSize.DEFAULT"
+                (click)="deviceDeletedHandler(deviceToBeDeleted().id!)"
+            >
+                Delete
+            </app-button>
+        }
     </div>
 </app-modal>
 
