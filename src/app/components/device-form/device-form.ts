@@ -1,21 +1,5 @@
-import {
-    Component,
-    computed,
-    effect,
-    inject,
-    input,
-    OnInit,
-    output,
-    Signal,
-    signal,
-} from '@angular/core';
-import {
-    FormControl,
-    FormGroup,
-    ReactiveFormsModule,
-    RequiredValidator,
-    Validators,
-} from '@angular/forms';
+import { Component, computed, effect, inject, input, OnInit, output, Signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Device, DeviceType } from '../../models/device';
 import { Input } from '../ui/input/input';
 import { Button, ButtonSize, ButtonVariant } from '../ui/button/button';
@@ -23,6 +7,7 @@ import { CreateDeviceDTO, EditDeviceDTO } from '../../dtos/deviceDTOs';
 import { DropdownOption, Dropdown } from '../ui/dropdown/dropdown';
 import { UsersService } from '../../services/users-service';
 import { User } from '../../models/user';
+import { DevicesService } from '../../services/devices-service';
 
 @Component({
     selector: 'app-device-form',
@@ -36,6 +21,8 @@ export class DeviceForm implements OnInit {
 
     deviceInfo = input<Device | null>();
     formTitle = input<string>('');
+
+    devicesService: DevicesService = inject(DevicesService);
 
     usersService: UsersService = inject(UsersService);
     users: Signal<User[]> = this.usersService.users;
@@ -173,6 +160,17 @@ export class DeviceForm implements OnInit {
         this.userId?.setValue(selectedUserId);
         this.userId?.markAsTouched();
         this.userId?.updateValueAndValidity();
+    }
+
+    async handleGenDescription() {
+        const device = this.deviceInfo();
+
+        if (device && device.id) {
+            const descrString = await this.devicesService.getAiDescr(device.id);
+            this.deviceForm.get('description')!.setValue(descrString);
+            this.deviceForm.get('description')!.markAsTouched();
+            this.deviceForm.get('description')!.updateValueAndValidity();
+        }
     }
 
     get name() {

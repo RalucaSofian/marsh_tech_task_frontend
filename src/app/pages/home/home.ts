@@ -28,6 +28,7 @@ export class Home {
 
     devicesService: DevicesService = inject(DevicesService);
     devices: Signal<Device[]> = this.devicesService.devices;
+    authService: AuthService = inject(AuthService);
 
     deleteDeviceModalOpened = signal<boolean>(false);
     deviceToBeDeleted = signal<Device>({});
@@ -38,8 +39,6 @@ export class Home {
 
     usersService: UsersService = inject(UsersService);
     currentUser: Signal<User> = this.usersService.currentUser;
-
-    authService: AuthService = inject(AuthService);
 
     ngOnInit(): void {
         this.devicesService.fetchDevices();

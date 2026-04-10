@@ -30,7 +30,6 @@ export class AuthService {
             headers: { 'Content-Type': 'application/json' },
         });
         if (response.status === HttpStatusCode.Ok) {
-            console.log('LOGIN OK');
             const token = await response.text();
             this.setJWT(token);
             this._isUserLoggedIn.set(true);

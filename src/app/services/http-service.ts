@@ -15,6 +15,12 @@ export class HttpService {
         });
     }
 
+    getText(resourcePath: string) {
+        return this.httpClient.get(`${this.baseURL}/${resourcePath}`, {
+            responseType: 'text',
+        });
+    }
+
     post<T>(resourcePath: string, body: any) {
         return this.httpClient.post<T>(`${this.baseURL}/${resourcePath}`, body, {
             headers: this.getDefaultHeaders(),
