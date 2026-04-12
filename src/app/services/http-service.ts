@@ -8,10 +8,10 @@ export class HttpService {
     private httpClient = inject(HttpClient);
     private baseURL = 'http://localhost:5047';
 
-    get<T>(resourcePath: string, searchParams: any = {}) {
+    get<T>(resourcePath: string, params: any = {}) {
         return this.httpClient.get<T>(`${this.baseURL}/${resourcePath}`, {
             headers: this.getDefaultHeaders(),
-            params: searchParams,
+            params: params,
         });
     }
 

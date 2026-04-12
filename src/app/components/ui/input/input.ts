@@ -20,7 +20,7 @@ import {
     styleUrl: './input.css',
 })
 export class Input implements ControlValueAccessor {
-    inputDefaultClasses: string = `flex h-10 w-full rounded-md border border-input bg-background px-3 py-2
+    inputDefaultClasses: string = `flex h-10 w-full rounded-md border border-input bg-card px-3 py-2
     text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm
     file:font-medium file:text-foreground placeholder:text-muted-foreground
     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2

@@ -12,10 +12,20 @@ import { CreateDeviceDTO, EditDeviceDTO } from '../../dtos/deviceDTOs';
 import { User } from '../../models/user';
 import { UsersService } from '../../services/users-service';
 import { AuthService } from '../../services/auth-service';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-home',
-    imports: [LucideAngularModule, Button, Input, DeviceCard, DeviceDetails, Modal, DeviceForm],
+    imports: [
+        LucideAngularModule,
+        Button,
+        Input,
+        DeviceCard,
+        DeviceDetails,
+        Modal,
+        ReactiveFormsModule,
+        DeviceForm,
+    ],
     templateUrl: './home.html',
     styleUrl: './home.css',
 })
@@ -36,6 +46,10 @@ export class Home {
     addDeviceModalOpened = signal<boolean>(false);
 
     selectedDeviceId = signal<number>(-1);
+
+    searchForm = new FormGroup({
+        searchTerm: new FormControl(''),
+    });
 
     usersService: UsersService = inject(UsersService);
     currentUser: Signal<User> = this.usersService.currentUser;
@@ -83,6 +97,16 @@ export class Home {
             userId: null,
         };
         this.devicesService.patchDevice(newDeviceInfo);
+        this.devicesService.fetchDevices();
+    }
+
+    public searchHandler() {
+        console.log(this.searchForm.value.searchTerm);
+        this.devicesService.fetchDevices(this.searchForm.value.searchTerm as string);
+    }
+
+    public clearSearch() {
+        this.searchForm.get('searchTerm')?.reset;
         this.devicesService.fetchDevices();
     }
 

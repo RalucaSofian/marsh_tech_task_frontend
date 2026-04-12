@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpService } from './http-service';
 import { Device } from '../models/device';
 import { CreateDeviceDTO, EditDeviceDTO } from '../dtos/deviceDTOs';
-import { firstValueFrom, lastValueFrom, take } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -16,8 +16,14 @@ export class DevicesService {
     private readonly _aiDescription = signal<string>('');
     readonly aiDescription = this._aiDescription.asReadonly();
 
-    async fetchDevices() {
-        this.http.get<Device[]>('devices').subscribe({
+    async fetchDevices(searchTerm: string = '') {
+        const params: any = {};
+
+        if (searchTerm != '') {
+            params.search = searchTerm;
+        }
+
+        this.http.get<Device[]>('devices', params).subscribe({
             next: (value) => {
                 this._devices.set(value);
             },
